@@ -1,11 +1,9 @@
 import os
 from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from dotenv import load_dotenv
 
-load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-WEB_APP_URL = os.getenv("WEB_APP_URL")
+BOT_TOKEN = "7277911506:AAFdMjLI9sTZ8knyrCuTAv48L8V9Nq20FVw"
+WEB_APP_URL = "https://owner01.onrender.com"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
