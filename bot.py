@@ -1,17 +1,16 @@
-import os
-from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+import os from flask import Flask, request from telegram import Bot, Update from telegram.ext import Dispatcher, CommandHandler
 
-BOT_TOKEN = "7277911506:AAFdMjLI9sTZ8knyrCuTAv48L8V9Nq20FVw"
-WEB_APP_URL = "https://owner01.onrender.com"
+TOKEN = os.environ['BOT_TOKEN'] WEBHOOK_URL = os.environ['WEBHOOK_URL']
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [
-        [InlineKeyboardButton("🌐 Open Owner App", web_app=WebAppInfo(url=WEB_APP_URL))]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Welcome to Owner Management 👋", reply_markup=reply_markup)
+app = Flask(name) bot = Bot(TOKEN) dispatcher = Dispatcher(bot, update_queue=None, workers=0)
 
-app = ApplicationBuilder().token(BOT_TOKEN).build()
-app.add_handler(CommandHandler("start", start))
-app.run_polling()
+def start(update, context): update.message.reply_text("سلام! Web App Ownerassets آماده‌ست ✅")
+
+dispatcher.add_handler(CommandHandler('start', start))
+
+@app.route(f'/{TOKEN}', methods=['POST']) def webhook(): update = Update.de_json(request.get_json(force=True), bot) dispatcher.process_update(update) return '', 200
+
+@app.route('/') def index(): return 'Web App Ownerassets در حال اجراست!'
+
+if name == 'main': bot.delete_webhook() bot.set_webhook(WEBHOOK_URL + '/' + TOKEN) app.run(host='0.0.0.0', port=int(os.environ.get('PORT', '5000')))
+
